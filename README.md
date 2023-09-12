@@ -1,7 +1,4 @@
-bible
-===
-
-A CLI written in Go for reading the Holy Bible.
+![bible](bible-logo.png)
 
 # Installation
 
