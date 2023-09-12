@@ -21,7 +21,7 @@ Access the Holy Bible in your terminal.
                  DEFAULT: "Gen"
 
   --v=...        Verse(s) (Examples: "1:10-11", "5", "3:16")
-                 DEFAULT: Random verse(s)
+                 DEFAULT: "1:1"
                   
   --t=...        Version (Examples: "kjv")
                  DEFAULT: "kjv"
