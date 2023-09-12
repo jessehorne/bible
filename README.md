@@ -39,12 +39,10 @@ Access the Holy Bible in your terminal.
 
 Examples:
 > bible --b="Gen" --v=1:1-2
-Genesis 1:1-2
 In the beginning God created the heaven and the earth.
 And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.
 
 > bible --b="Gen" --v=1:1-2 -n
-Genesis 1:1-2
 1 In the beginning God created the heaven and the earth.
 2 And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.
 
