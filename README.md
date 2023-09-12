@@ -1,10 +1,14 @@
 ![bible](bible-logo.png)
 
+---
+
 # Installation
 
 ```shell
 go install github.com/jessehorne/bible@latest
 ```
+
+---
 
 # Usage
 
@@ -19,17 +23,17 @@ Access the Holy Bible in your terminal.
   --v=...         Verse(s) (Examples: "1:10-11", "5", "3:16")
                   DEFAULT: Random verse(s)
                   
-  --t=...         Version (Examples: "KJV")
-                  DEFAULT: "KJV"
+  --t=...         Version (Examples: "kjv")
+                  DEFAULT: "kjv"
                   
-  --l=...         Language (Examples: "EN")
-                  DEFAULT: "EN"
+  --l=...         Language (Examples: "en")
+                  DEFAULT: "en"
   
   -lt            List supported versions.
   --ll        	 List translations for a version.
   --lb		  	 List all books in a version.
   
-  -n              Include the number of the verse when printed. (Example: "1 In the beginning..." vs "In the beginning...")
+  -n              Include the number of the verse when printed.
 
   --help          Show this information.
 
@@ -47,10 +51,14 @@ Genesis 1:1-2
 For more information, please visit https://github.com/jessehorne/bible
 ```
 
-# Supported Versions / Languages
+---
 
-* **(DEFAULT)** KJV-EN via ebible.org
+# Supported Versions & Translations
+
+* **(DEFAULT)** kjv-en via ebible.org (see `data/kjv.db`)
 * more coming soon...
+
+---
 
 # License
 
