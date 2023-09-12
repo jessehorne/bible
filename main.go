@@ -55,7 +55,7 @@ var connections = map[string]*sql.DB{
 
 func loadDatabases() {
 	// connect to local database
-	kjvEnglishConn, err := sql.Open("sqlite3", "./data/kjv.db")
+	kjvEnglishConn, err := sql.Open("sqlite3", "data/kjv.db")
 	if err != nil {
 		panic(err)
 	}
@@ -251,7 +251,7 @@ func main() {
 	loadDatabases()
 
 	var book = flag.String("b", "Gen", "Book")
-	var verses = flag.String("v", "1:1", "Verses")
+	var verses = flag.String("v", "1:1-1", "Verses")
 	var version = flag.String("t", "kjv-en", "Version")
 
 	var listVersions = flag.Bool("lt", false, "List all versions")
