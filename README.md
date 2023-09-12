@@ -17,25 +17,25 @@ go install github.com/jessehorne/bible@latest
 Usage: bible [OPTION]...
 Access the Holy Bible in your terminal.
 
-  --b=...         Book
-                  DEFAULT: "Gen"
+  --b=...        Book
+                 DEFAULT: "Gen"
 
-  --v=...         Verse(s) (Examples: "1:10-11", "5", "3:16")
-                  DEFAULT: Random verse(s)
+  --v=...        Verse(s) (Examples: "1:10-11", "5", "3:16")
+                 DEFAULT: Random verse(s)
                   
-  --t=...         Version (Examples: "kjv")
-                  DEFAULT: "kjv"
+  --t=...        Version (Examples: "kjv")
+                 DEFAULT: "kjv"
                   
-  --l=...         Language (Examples: "en")
-                  DEFAULT: "en"
+  --l=...        Language (Examples: "en")
+                 DEFAULT: "en"
   
   -lt            List supported versions.
   --ll        	 List translations for a version.
-  --lb		  	 List all books in a version.
+  --lb           List all books in a version.
   
-  -n              Include the number of the verse when printed.
+  -n             Include the number of the verse when printed.
 
-  --help          Show this information.
+  --help         Show this information.
 
 Examples:
 > bible --b="Gen" --v=1:1-2

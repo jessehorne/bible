@@ -7,7 +7,6 @@ import (
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/exp/slices"
-	"log"
 	"strconv"
 )
 
@@ -28,9 +27,8 @@ Access the Holy Bible in your terminal.
   --l=...         Language (Examples: "EN")
                   DEFAULT: "EN"
   
-  -lt            List supported versions.
-  --ll        	 List translations for a version.
-  --lb		  	 List all books in a version.
+  -lt             List supported versions.
+  --lb		  	  List all books in a version.
   
   -n              Include the number of the verse when printed. (Example: "1 In the beginning..." vs "In the beginning...")
 
@@ -44,13 +42,19 @@ And the earth was without form, and void; and darkness was upon the face of the 
 
 > bible --b="Gen" --v=1:1-2 -n
 Genesis 1:1-2
-1 In the beginning God created the heaven and the earth.
-2 And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.
+1:1 In the beginning God created the heaven and the earth.
+1:2 And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.
 
 For more information, please visit https://github.com/jessehorne/bible`
 
 var connections = map[string]*sql.DB{
 	"kjv": nil,
+}
+
+type Verse struct {
+	Chapter int
+	Number  int
+	Content string
 }
 
 func loadDatabases() {
@@ -107,14 +111,16 @@ func getBooks(v string) ([]string, error) {
 }
 
 // getVerses returns an array of verses for the specified version+book, if the book and/or verses exist, otherwise an error
-func getVerses(v string, book string, chapter int, start int, end int) ([]string, error) {
-	var verses []string
+func getVerses(v string, book string, chapter int, start int, end int) ([]Verse, error) {
+	var verses []Verse
 
 	var query string
-	if start == 0 || end == 0 {
-		query = fmt.Sprintf("SELECT content FROM bible WHERE book='%s' AND chapter='%d'", book, chapter)
+	if chapter == 0 {
+		query = fmt.Sprintf("SELECT chapter, verse as number, content FROM bible WHERE book='%s'", book)
+	} else if start == 0 || end == 0 {
+		query = fmt.Sprintf("SELECT chapter, verse as number, content FROM bible WHERE book='%s' AND chapter='%d'", book, chapter)
 	} else {
-		query = fmt.Sprintf("SELECT content FROM bible WHERE book='%s' AND chapter='%d' AND verse BETWEEN %d AND %d", book, chapter, start, end)
+		query = fmt.Sprintf("SELECT chapter, verse as number, content FROM bible WHERE book='%s' AND chapter='%d' AND verse BETWEEN %d AND %d", book, chapter, start, end)
 	}
 	q, err := connections[v].Query(query)
 	if err != nil {
@@ -123,9 +129,9 @@ func getVerses(v string, book string, chapter int, start int, end int) ([]string
 	defer q.Close()
 
 	for q.Next() {
-		var verse string
-		q.Scan(&verse)
-		verses = append(verses, verse)
+		var v Verse
+		q.Scan(&v.Chapter, &v.Number, &v.Content)
+		verses = append(verses, v)
 	}
 
 	return verses, nil
@@ -251,11 +257,10 @@ func main() {
 	loadDatabases()
 
 	var book = flag.String("b", "Gen", "Book")
-	var verses = flag.String("v", "1:1-1", "Verses")
+	var verses = flag.String("v", "0", "Verses")
 	var version = flag.String("t", "kjv-en", "Version")
 
 	var listVersions = flag.Bool("lt", false, "List all versions")
-	var listLanguages = flag.Bool("ll", false, "List all translations of the chosen version.")
 	var listBooks = flag.Bool("lb", false, "List all books in the chosen version.")
 
 	var showNumbers = flag.Bool("n", false, "Show verse numbers.")
@@ -266,13 +271,11 @@ func main() {
 
 	flag.Parse()
 
-	// TODO: REMOVE WHEN DNE
-	// -n
-
 	if *listBooks {
 		books, err := getBooks(*version)
 		if err != nil {
-			log.Fatalln(err)
+			fmt.Println(err.Error())
+			return
 		}
 
 		for i, b := range books {
@@ -286,12 +289,10 @@ func main() {
 		}
 
 		return
-	} else if *listLanguages {
-		// this will hopefully not be hardcoded soon <3
-		fmt.Println("English (en)")
 	} else if *listVersions {
 		// this will hopefully not be hardcoded soon <3
-		fmt.Println("KJV (kjv)")
+		fmt.Println("KJV in English (kjv-en)")
+		return
 	} else {
 		// Nothing else to do besides get verses...
 
@@ -313,22 +314,23 @@ func main() {
 			fmt.Println(err.Error())
 		}
 
-		verses, err := getVerses(*version, *book, chapter, start, end)
+		vs, err := getVerses(*version, *book, chapter, start, end)
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
 
-		if len(verses) == 0 {
+		if len(vs) == 0 {
 			fmt.Println("invalid: unknown verse range")
 			return
 		}
 
-		lineNumber := start
-		for _, v := range verses {
+		for _, v := range vs {
 			if *showNumbers {
-				fmt.Print(lineNumber, " ")
+				fmt.Print(v.Chapter, ":", v.Number, " ")
 			}
 
-			fmt.Print(stripVerse(v) + "\n")
-
-			lineNumber += 1
+			fmt.Print(stripVerse(v.Content) + "\n")
 		}
 
 		return
