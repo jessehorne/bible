@@ -43,8 +43,8 @@ In the beginning God created the heaven and the earth.
 And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.
 
 > bible --b="Gen" --v=1:1-2 -n
-1 In the beginning God created the heaven and the earth.
-2 And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.
+1:1 In the beginning God created the heaven and the earth.
+1:2 And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.
 
 For more information, please visit https://github.com/jessehorne/bible
 ```
